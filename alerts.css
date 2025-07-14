@@ -1,0 +1,58 @@
+/* Contenedor principal para las alertas */
+#alert-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Estilos base para cada alerta */
+.alert {
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  max-width: 600px; /* Limita el ancho para mejor legibilidad */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeInOut 3s forwards; /* Animación para aparecer y desaparecer */
+}
+
+/* Estilos para alertas de éxito */
+.alert-success {
+  background-color: #4caf50; /* Verde */
+  color: white;
+}
+
+/* Estilos para alertas de error */
+.alert-error {
+  background-color: #f44336; /* Rojo */
+  color: white;
+}
+
+/* Animación de entrada y salida */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}

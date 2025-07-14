@@ -1,0 +1,413 @@
+/* Estilos para el checkout */
+
+.checkout-progress {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.progress-step.active {
+  color: #ffd700;
+}
+
+.progress-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  width: 10px;
+  height: 2px;
+  background: #666;
+}
+
+.progress-step.active:not(:last-child)::after {
+  background: #ffd700;
+}
+
+.checkout-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ffd700;
+}
+
+.checkout-header h1 {
+  color: white;
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.checkout-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+/* Form Styles */
+.checkout-form {
+  background: #1a1a1a;
+  border-radius: 15px;
+  padding: 30px;
+  border: 2px solid #ffd700;
+}
+
+.form-section {
+  margin-bottom: 35px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #333;
+}
+
+.form-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.form-section h3 {
+  color: white;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-section h3 i {
+  color: #ffd700;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: white;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #333;
+  color: white;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Radio Options */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: #333;
+}
+
+.radio-option:hover {
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.radio-option input[type="radio"] {
+  display: none;
+}
+
+.radio-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #666;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom {
+  border-color: #ffd700;
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: #ffd700;
+  border-radius: 50%;
+}
+
+.radio-content {
+  color: white;
+}
+
+.radio-content strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+.radio-content small {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.radio-content i {
+  margin-right: 8px;
+  color: #ffd700;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid #333;
+}
+
+/* Order Summary */
+.order-summary {
+  height: fit-content;
+  position: sticky;
+  top: 120px;
+}
+
+.summary-card {
+  background: #1a1a1a;
+  border-radius: 15px;
+  padding: 25px;
+  border: 2px solid #ffd700;
+}
+
+.summary-card h3 {
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.order-items {
+  margin-bottom: 20px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #333;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-item-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.order-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.order-item-info {
+  flex: 1;
+  color: white;
+}
+
+.order-item-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.order-item-details {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.order-item-price {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.summary-totals {
+  margin-top: 20px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #ccc;
+}
+
+.summary-row.total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #333;
+}
+
+.summary-row.total span:last-child {
+  color: #ffd700;
+}
+
+.text-success {
+  color: #27ae60 !important;
+}
+
+.security-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(39, 174, 96, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  color: #27ae60;
+  font-size: 0.9rem;
+}
+
+.security-info i {
+  margin-right: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkout-progress {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .progress-step:not(:last-child)::after {
+    display: none;
+  }
+
+  .checkout-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .radio-group {
+    gap: 10px;
+  }
+
+  .radio-option {
+    padding: 12px;
+  }
+
+  .order-summary {
+    position: static;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-form,
+  .summary-card {
+    padding: 20px;
+  }
+
+  .checkout-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .form-section h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Animations */
+.checkout-form,
+.summary-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.radio-option {
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+/* Loading state */
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary.loading {
+  position: relative;
+}
+
+.btn-primary.loading::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+}

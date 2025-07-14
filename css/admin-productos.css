@@ -1,0 +1,94 @@
+/* Estilos específicos para la gestión de productos en el panel de administración */
+
+/* Ajustes para la tabla de productos */
+.table-container table .product-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-container table .product-name-cell img {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+}
+
+/* Badges de stock */
+.stock-badge {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.stock-badge.in-stock {
+  background-color: rgba(46, 204, 113, 0.1); /* Verde claro */
+  color: #2ecc71; /* Verde */
+}
+
+.stock-badge.low-stock {
+  background-color: rgba(231, 76, 60, 0.1); /* Rojo claro */
+  color: #e74c3c; /* Rojo */
+}
+
+/* Estilos para el modal de producto */
+#productModal .form-group {
+  margin-bottom: 18px;
+}
+
+#productModal .form-group label {
+  font-size: 0.95rem;
+}
+
+#productModal .form-group input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+#productModal .form-group input[type="number"]::-webkit-outer-spin-button,
+#productModal .form-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#productModal .image-preview {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+#productModal .image-preview img {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .table-container table {
+    min-width: 600px; /* Asegura que la tabla sea legible en tabletas */
+  }
+}
+
+@media (max-width: 480px) {
+  .table-container table {
+    min-width: 500px; /* Asegura que la tabla sea legible en móviles */
+  }
+  .table-container table .product-name-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .table-container table .product-name-cell img {
+    width: 30px;
+    height: 30px;
+  }
+}
