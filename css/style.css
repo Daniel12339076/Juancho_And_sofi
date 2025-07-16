@@ -659,7 +659,7 @@ section h2::after {
 .alert {
   position: fixed;
   top: 100px;
-  right: 20px;
+  right: 40%;
   z-index: 10000;
   min-width: 300px;
   max-width: 500px;

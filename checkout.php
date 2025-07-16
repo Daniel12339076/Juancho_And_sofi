@@ -127,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+
 // Si no es POST o hay un error, se muestra el formulario de checkout
 ?>
 
@@ -169,6 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </header>
 
     <main class="main-content" style="margin-top: 100px;">
+        
         <div class="container">
             <div class="checkout-header">
                 <h1>Finalizar Compra</h1>
