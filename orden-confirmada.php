@@ -248,9 +248,6 @@ $info_adicional = $_SESSION['last_order'] ?? [];
                 <a href="index.php" class="btn btn-primary">
                     <i class="fas fa-home"></i> Volver al Inicio
                 </a>
-                <a href="mis-pedidos.php" class="btn btn-outline">
-                    <i class="fas fa-list"></i> Ver Mis Pedidos
-                </a>
                 <button onclick="window.print()" class="btn btn-secondary">
                     <i class="fas fa-print"></i> Imprimir Pedido
                 </button>

@@ -79,7 +79,6 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'success') {
             </form>
             
             <div class="auth-footer">
-                <p>¿Olvidaste tu contraseña? <a href="#">Recuperar aquí</a></p>
                 <p>¿No tienes una cuenta? <a href="registro.php">Regístrate aquí</a></p>
             </div>
         </div>
