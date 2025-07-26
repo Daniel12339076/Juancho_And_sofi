@@ -86,7 +86,7 @@ foreach ($categorias as $categoria) {
                 <div class="categories-grid">
                     <?php foreach ($categorias as $categoria): ?>
                     <a href="categoria.php?id=<?php echo $categoria['id']; ?>" class="category-card">
-                        <img src="images/categorias/<?php echo htmlspecialchars($categoria['imagen']); ?>" alt="<?php echo htmlspecialchars($categoria['nombre']); ?>" onerror="this.src='/placeholder.svg?height=100&width=100'">
+                        <img src="images/categorias/<?php echo htmlspecialchars($categoria['imagen']); ?>" alt="<?php echo htmlspecialchars($categoria['nombre']); ?>" >
                         <h3><?php echo htmlspecialchars($categoria['nombre']); ?></h3>
                     </a>
                     <?php endforeach; ?>
@@ -102,7 +102,7 @@ foreach ($categorias as $categoria) {
                         <div class="product-card">
                             <div class="product-image">
                                 <a href="producto.php?id=<?php echo $producto['id']; ?>">
-                                    <img src="images/productos/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" onerror="this.src='/placeholder.svg?height=200&width=200'">
+                                    <img src="images/productos/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                                 </a>
                                 <?php if ($producto['descuento'] > 0): ?>
                                     <div class="discount-badge">-<?php echo htmlspecialchars($producto['descuento']); ?>%</div>
@@ -176,7 +176,7 @@ foreach ($categorias as $categoria) {
                             <div class="product-card">
                                 <div class="product-image">
                                     <a href="producto.php?id=<?php echo $producto['id']; ?>">
-                                        <img src="images/productos/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" onerror="this.src='/placeholder.svg?height=200&width=200'">
+                                        <img src="images/productos/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" >
                                     </a>
                                     <?php if ($producto['descuento'] > 0): ?>
                                         <div class="discount-badge">-<?php echo htmlspecialchars($producto['descuento']); ?>%</div>
