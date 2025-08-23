@@ -56,6 +56,166 @@ $info_adicional = $_SESSION['last_order'] ?? [];
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/confirmacion.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+  @media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #print-receipt, #print-receipt * {
+    visibility: visible !important;
+    display: block !important;
+  }
+  #print-receipt {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100vw !important;
+    background: #000 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+  #print-receipt .logo {
+    width: 80px;
+    display: block;
+    margin: 0 auto 10px;
+  }
+
+  #print-receipt h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #print-receipt .info {
+    margin-bottom: 15px;
+    font-size: 12px;
+  }
+
+  #print-receipt .items {
+    border-top: 1px solid yellow;
+    border-bottom: 1px solid yellow;
+    padding: 10px 0;
+    margin-bottom: 10px;
+  }
+
+  #print-receipt .item-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  #print-receipt .total {
+    text-align: right;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  #print-receipt .thanks {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 12px;
+  }
+
+            
+            #print-receipt, #print-receipt * {
+                visibility: visible;
+            }
+            #print-receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100vw;
+                padding: 0;
+                margin: 0;
+                background: #000; /* Fondo negro */
+                color: #fff;      /* Texto blanco */
+                font-family: 'Poppins', Arial, sans-serif;
+                border: 4px solid transparent;
+                border-radius: 12px;
+                background-clip: padding-box;
+                position: relative;
+            }
+            #print-receipt::before {
+                content: "";
+                position: absolute;
+                top: -4px; left: -4px; right: -4px; bottom: -4px;
+                border-radius: 12px;
+                background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+                z-index: -1;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Estilos para el recibo en pantalla */
+        #print-receipt {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #000; /* Fondo negro */
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(255,215,0,0.3);
+            padding: 24px;
+            color: #fff; /* Texto blanco */
+            border: 4px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+        #print-receipt::before {
+            content: "";
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+            z-index: -1;
+        }
+        #print-receipt .logo {
+            display: block;
+            margin: 0 auto 12px auto;
+            max-width: 120px;
+            filter: brightness(0) invert(1); /* Hace el logo blanco si es oscuro */
+        }
+        #print-receipt h2 {
+            text-align: center;
+            margin-bottom: 8px;
+            color: #FFD700; /* Dorado para el título */
+        }
+        #print-receipt .info {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #ddd;
+        }
+        #print-receipt .items {
+            border-top: 1px dashed #FFD700; /* Línea amarilla punteada */
+            margin-top: 12px;
+            margin-bottom: 12px;
+        }
+        #print-receipt .item-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            padding: 4px 0;
+            color: #eee;
+        }
+        #print-receipt .total {
+            font-weight: bold;
+            font-size: 16px;
+            text-align: right;
+            margin-top: 12px;
+            color: #FFD700; /* Total en dorado */
+        }
+        #print-receipt .thanks {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 15px;
+            color: #4caf50; /* Verde para resaltar */
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -244,14 +404,47 @@ $info_adicional = $_SESSION['last_order'] ?? [];
                 </div>
             </div>
 
-            <div class="confirmation-actions">
-                <a href="index.php" class="btn btn-primary">
-                    <i class="fas fa-home"></i> Volver al Inicio
-                </a>
-                <button onclick="window.print()" class="btn btn-secondary">
-                    <i class="fas fa-print"></i> Imprimir Pedido
-                </button>
+           <!-- Recibo para impresión -->
+    <div id="print-receipt" class="no-print">
+        <img src="Logo/Logo juancho.png" alt="Logo" class="logo">
+        <h2>Recibo de Pedido</h2>
+        <div class="info">
+            <div><strong>N° Pedido:</strong> <?php echo $codigo_orden; ?></div>
+            <div><strong>Fecha y Hora:</strong> <?php echo date('d/m/Y H:i:s', strtotime($orden['fecha'])); ?></div>
+            <div><strong>Cliente:</strong> <?php echo htmlspecialchars($orden['cliente_nombre']); ?></div>
+            <div><strong>Correo:</strong> <?php echo htmlspecialchars($orden['cliente_correo']); ?></div>
+            <?php if (isset($info_adicional['telefono'])): ?>
+            <div><strong>Teléfono:</strong> <?php echo $info_adicional['telefono']; ?></div>
+            <?php endif; ?>
+            <?php if (isset($info_adicional['direccion']) && !empty($info_adicional['direccion'])): ?>
+            <div><strong>Dirección:</strong> <?php echo htmlspecialchars($info_adicional['direccion']); ?></div>
+            <?php endif; ?>
+        </div>
+        <div class="items">
+            <?php foreach ($items as $item): ?>
+            <div class="item-row">
+                <span><?php echo htmlspecialchars($item['nombre']); ?> x<?php echo $item['cantidad']; ?></span>
+                <span>$<?php echo number_format($item['valor_total']); ?></span>
             </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="total">
+            Total Pagado: $<?php echo number_format($orden['total']); ?>
+        </div>
+        <div class="thanks">
+            ¡Gracias por tu compra!<br>
+            Tienda Juancho & Sofi
+        </div>
+    </div>
+
+    <div class="confirmation-actions">
+        <a href="index.php" class="btn btn-primary">
+            <i class="fas fa-home"></i> Volver al Inicio
+        </a>
+        <button onclick="window.print()" class="btn btn-secondary">
+            <i class="fas fa-print"></i> Imprimir Pedido
+        </button>
+    </div>
         </div>
     </main>
 

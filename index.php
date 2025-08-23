@@ -131,9 +131,7 @@ foreach ($categorias as $categoria) {
                                 </div>
                                 
                                 <div class="product-actions">
-                                    <button class="btn btn-primary" onclick="addToCart(<?php echo $producto['id']; ?>)">
-                                        <i class="fas fa-shopping-cart"></i> Agregar
-                                    </button>
+                                    <a href="producto.php?id=<?php echo $producto['id']; ?>" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Agregar</a>
                                 </div>
                             </div>
                         </div>
@@ -202,8 +200,7 @@ foreach ($categorias as $categoria) {
                                         <?php endif; ?>
                                     </div>
                                     <div class="product-actions">
-                                        <button class="btn btn-primary" onclick="addToCart(<?php echo $producto['id']; ?>)">
-                                            <i class="fas fa-shopping-cart"></i> Agregar
+                                        <a href="producto.php?id=<?php echo $producto['id']; ?>" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Agregar</a>
                                         </button>
                                     </div>
                                 </div>

@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Declare formatCurrency function
   function formatCurrency(amount) {
-    return amount.toLocaleString("es-ES", { style: "currency", currency: "EUR" })
+    return amount.toLocaleString("es-CO", { style: "currency", currency: "COP" })
   }
 
   if (!orderData || orderData.items.length === 0) {

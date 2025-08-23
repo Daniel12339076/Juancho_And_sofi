@@ -58,7 +58,7 @@ function createCartItemElement(item) {
         </div>
         <div class="item-quantity-controls">
             <button class="decrease-qty" data-id="${item.id}">-</button>
-            <input type="number" value="${item.cantidad}" min="1" max="${item.stock_disponible}" data-id="${item.id}" class="item-qty-input">
+            <input type="number" name="cantidad" value="${item.cantidad}" min="1" max="${item.stock_disponible}" data-id="${item.id}" class="item-qty-input">
             <button class="increase-qty" data-id="${item.id}">+</button>
         </div>
         <button class="item-remove" data-id="${item.id}">
@@ -193,7 +193,7 @@ function showAlert(message, type) {
 }
 
 function formatCurrency(amount) {
-  return amount.toLocaleString("es-ES", { style: "currency", currency: "EUR" })
+  return amount.toLocaleString("es-CO", { style: "currency", currency: "COP" })
 }
 
 function saveCart(cart) {
