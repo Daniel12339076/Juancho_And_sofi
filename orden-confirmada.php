@@ -45,6 +45,12 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Obtener información adicional del pedido desde la sesión
 $info_adicional = $_SESSION['last_order'] ?? [];
+
+// Verifica que el carrito esté vacío después de confirmar la compra
+if (isset($_SESSION['carrito'])) {
+  echo 'Error: el carrito no está vacío';
+  exit;
+}
 ?>
 
 <!DOCTYPE html>

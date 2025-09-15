@@ -385,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cambiar_clave'])) {
             </div>
             <nav class="nav">
                 <a href="index.php">Inicio</a>
-                <a href="productos.php">Productos</a>
+                <a href="index.php">Productos</a>
                 <a href="perfil.php">Mi Perfil</a>
                 <a href="logout.php">Salir</a>
             </nav>

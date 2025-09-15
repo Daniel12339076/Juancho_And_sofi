@@ -50,14 +50,393 @@ while ($row = $stmt_ventas_mes->fetch(PDO::FETCH_ASSOC)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Ventas - Admin</title>
     <link rel="stylesheet" href="../css/admin.css">
+    <!-- Agregando estilos responsivos -->
+    <link rel="stylesheet" href="../css/responsive-ventas.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+/* Estilos responsivos para la página de ventas */
+
+/* Agregando estilos para menú hamburguesa y sidebar colapsable */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 10px;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1001;
+  background: rgba(142, 68, 173, 0.9);
+  border-radius: 4px;
+}
+
+.sidebar.collapsed .nav-menu {
+  display: none;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
+  .admin-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    order: -1;
+  }
+
+  /* Mejorando el diseño del logo en tablets */
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .logo-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo h3 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .nav-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .nav-menu li {
+    margin: 0;
+  }
+
+  .nav-menu a {
+    padding: 8px 12px;
+    font-size: 14px;
+    white-space: nowrap;
+    border-radius: 6px;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 15px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .chart-card {
+    margin: 20px 0;
+  }
+
+  .chart-card .card-body {
+    height: 300px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 768px) {
+  /* Ocultando completamente el sidebar por defecto usando display: none */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 1000;
+    overflow-y: auto;
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    display: none;
+    transition: all 0.3s ease;
+  }
+
+  /* Asegurando que el contenedor principal ocupe todo el ancho sin margen izquierdo */
+  .admin-container {
+    flex-direction: row;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding-top: 60px;
+  }
+
+  /* Mostrando el sidebar solo cuando está activo usando display: block */
+  .sidebar.active {
+    display: block;
+    left: 0;
+  }
+
+  /* Activando menú hamburguesa en móviles */
+  .menu-toggle {
+    display: block;
+  }
+
+  .sidebar.active ~ .sidebar-overlay {
+    display: block;
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  .logo {
+    padding: 20px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .logo-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .logo h3 {
+    font-size: 16px;
+    margin: 0;
+    color: white;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    gap: 0;
+    display: flex !important;
+  }
+
+  .sidebar.collapsed .nav-menu {
+    display: flex !important;
+  }
+
+  .nav-menu li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-menu a {
+    width: 100%;
+    text-align: left;
+    margin: 0;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    transition: background-color 0.2s ease;
+  }
+
+  .nav-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-menu a.active {
+    background-color: rgba(52, 152, 219, 0.3);
+    border-left: 4px solid #3498db;
+  }
+
+  .nav-menu i {
+    width: 20px;
+    text-align: center;
+  }
+
+  .content-header h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 15px;
+  }
+
+  .stat-card h3 {
+    font-size: 18px;
+  }
+
+  /* Tabla responsiva */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 800px;
+    font-size: 12px;
+  }
+
+  table th,
+  table td {
+    padding: 8px 4px;
+    white-space: nowrap;
+  }
+
+  .product-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 150px;
+  }
+
+  .table-img {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  .product-cell span {
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .chart-card .card-body {
+    height: 250px;
+    padding: 10px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+  }
+
+  .main-content {
+    padding: 10px;
+    padding-top: 60px;
+  }
+
+  .content-header h1 {
+    font-size: 18px;
+  }
+
+  .stat-card {
+    padding: 12px;
+  }
+
+  .stat-info h3 {
+    font-size: 16px;
+  }
+
+  .stat-info p {
+    font-size: 12px;
+  }
+
+  .card-header h3 {
+    font-size: 16px;
+  }
+
+  table {
+    font-size: 11px;
+  }
+
+  .chart-card .card-body {
+    height: 200px;
+    padding: 5px;
+  }
+
+  /* Ocultar columnas menos importantes en móviles muy pequeños */
+  table th:nth-child(1),
+  table td:nth-child(1),
+  table th:nth-child(8),
+  table td:nth-child(8) {
+    display: none;
+  }
+}
+
+/* Mejoras generales para responsividad */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex: 1;
+  overflow-x: hidden;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chart-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chart-card .card-body {
+  position: relative;
+  height: 400px;
+}
+
+#salesChart {
+  max-width: 100%;
+  height: 100% !important;
+}
+
+/* Asegurar que las imágenes sean responsivas */
+.table-img {
+  max-width: 40px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.logo-img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+    </style>
 </head>
 <body>
     <div class="admin-container">
+        <!-- Agregando botón de menú hamburguesa -->
+        <button class="menu-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        
         <!-- Sidebar -->
-        <nav class="sidebar">
+        <nav class="sidebar" id="sidebar">
             <div class="logo">
                 <img src="../Logo/Logo juancho.png" alt="Logo" class="logo-img">
                 <h3>Panel Admin</h3>
@@ -73,6 +452,9 @@ while ($row = $stmt_ventas_mes->fetch(PDO::FETCH_ASSOC)) {
                 <li><a href="../logout.php"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
             </ul>
         </nav>
+
+        <!-- Agregando overlay para cerrar sidebar en móviles -->
+        <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -162,6 +544,42 @@ while ($row = $stmt_ventas_mes->fetch(PDO::FETCH_ASSOC)) {
     </div>
 
     <script src="../js/admin.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.toggle('active');
+            /* Mejorando la lógica del overlay */
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.remove('active');
+            /* Usando clase active en lugar de style.display */
+            overlay.classList.remove('active');
+        }
+
+        // Cerrar sidebar al hacer clic en un enlace (en móviles)
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Cerrar sidebar al redimensionar la ventana
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                closeSidebar();
+            }
+        });
+    </script>
+    
     <script>
         // Datos para el gráfico de ventas
         const salesData = {

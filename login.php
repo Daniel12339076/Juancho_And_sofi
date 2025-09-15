@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $database = new Database();
     $db = $database->getConnection();
 
-    $stmt = $db->prepare("SELECT id, nombre, correo, clave, rol FROM usuarios WHERE correo = ?");
+    $stmt = $db->prepare("SELECT * FROM usuarios WHERE correo = ?");
     $stmt->execute([$correo]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -20,11 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['user_id'] = $usuario['id'];
         $_SESSION['user_name'] = $usuario['nombre'];
         $_SESSION['rol'] = $usuario['rol'];
+        $_SESSION['correo'] = $usuario['correo'];
+        $_SESSION['celular'] = $usuario['celular'];
 
         if ($usuario['rol'] === 'administrador') {
             header("Location: admin/index.php");
         } else {
             header("Location: index.php");
+
         }
         exit();
     } else {

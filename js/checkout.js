@@ -153,3 +153,15 @@ function displayOrderSummary(orderData) {
   document.getElementById("checkout-descuentos").textContent = `-${window.formatCurrency(orderData.descuentos)}`
   document.getElementById("checkout-total").textContent = window.formatCurrency(orderData.total)
 }
+
+// Envía los datos del carrito al servidor cuando se confirma la compra
+$.ajax({
+  type: 'POST',
+  url: 'checkout.php',
+  data: {
+    carrito: JSON.stringify(carrito)
+  },
+  success: function(response) {
+    // ...
+  }
+});

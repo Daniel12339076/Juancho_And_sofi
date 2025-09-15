@@ -5,22 +5,37 @@ require_once 'config/database.php';
 $database = new Database();
 $db = $database->getConnection();
 
-// Obtener categorías
+// --- Procesar búsqueda ---
+$productos_busqueda = [];
+$buscar = null;
+
+if (isset($_GET['buscar'])) {
+    $buscar = trim($_GET['buscar']);
+    $stmt = $db->prepare("SELECT * FROM productos WHERE nombre LIKE ?");
+    $stmt->execute(["%$buscar%"]);
+    $productos_busqueda = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// --- Obtener categorías ---
 $stmt_categorias = $db->prepare("SELECT * FROM categorias ORDER BY nombre ASC");
 $stmt_categorias->execute();
 $categorias = $stmt_categorias->fetchAll(PDO::FETCH_ASSOC);
 
-// Obtener productos destacados (ej. con descuento o los más recientes)
+// --- Obtener productos destacados ---
 $stmt_destacados = $db->prepare("SELECT * FROM productos WHERE descuento > 0 ORDER BY descuento DESC LIMIT 8");
 $stmt_destacados->execute();
 $productos_destacados = $stmt_destacados->fetchAll(PDO::FETCH_ASSOC);
 
-// Obtener productos por categoría para la sección "Explorar por Categoría"
+// --- Obtener productos por categoría ---
 $productos_por_categoria = [];
 foreach ($categorias as $categoria) {
     $stmt_productos_cat = $db->prepare("SELECT * FROM productos WHERE id_categoria = ? ORDER BY fecha_creacion DESC LIMIT 4");
     $stmt_productos_cat->execute([$categoria['id']]);
-    $productos_por_categoria[$categoria['nombre']] = $stmt_productos_cat->fetchAll(PDO::FETCH_ASSOC);
+    $productos_por_categoria[] = [
+        'id' => $categoria['id'],
+        'nombre' => $categoria['nombre'],
+        'productos' => $stmt_productos_cat->fetchAll(PDO::FETCH_ASSOC)
+    ];
 }
 ?>
 
@@ -39,7 +54,7 @@ foreach ($categorias as $categoria) {
         <nav class="navbar">
             <div class="nav-brand">
                 <a href="index.php">
-                    <img src="Logo/Logo juancho.png" alt="Logo" class="logo" >
+                    <img src="Logo/Logo juancho.png" alt="Logo" class="logo">
                 </a>
             </div>
             
@@ -63,10 +78,13 @@ foreach ($categorias as $categoria) {
                 <?php endif; ?>
             </div>
         </nav>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Buscar productos...">
-            <button id="searchButton"><i class="fas fa-search"></i></button>
-        </div>
+       <div class="search-bar">
+    <form action="index.php" method="GET" class="search-form">
+        <input type="text" name="buscar" id="searchInput" placeholder="Buscar productos..." required>
+        <button type="submit" id="searchButton"><i class="fas fa-search"></i></button>
+    </form>
+</div>
+
     </header>
 
     <!-- Hero Section -->
@@ -80,6 +98,37 @@ foreach ($categorias as $categoria) {
 
     <main class="main-content">
         <div class="container">
+
+            <!-- Resultados de Búsqueda -->
+            <?php if ($buscar): ?>
+            <section class="search-results">
+                <h2>Resultados de la búsqueda para "<?php echo htmlspecialchars($buscar); ?>"</h2>
+                <div class="products-grid">
+                    <?php if (!empty($productos_busqueda)): ?>
+                        <?php foreach ($productos_busqueda as $producto): ?>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <a href="producto.php?id=<?php echo $producto['id']; ?>">
+                                    <img src="images/productos/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" onerror="this.src='/placeholder.svg?height=200&width=200'">
+                                </a>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">
+                                    <a href="producto.php?id=<?php echo $producto['id']; ?>">
+                                        <?php echo htmlspecialchars($producto['nombre']); ?>
+                                    </a>
+                                </h3>
+                                <p><?php echo htmlspecialchars($producto['descripcion']); ?></p>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>No se encontraron productos.</p>
+                    <?php endif; ?>
+                </div>
+            </section>
+            <?php endif; ?>
+
             <!-- Categorías Destacadas -->
             <section class="featured-categories">
                 <h2>Explora Nuestras Categorías</h2>
@@ -93,7 +142,7 @@ foreach ($categorias as $categoria) {
                 </div>
             </section>
 
-            <!-- Productos Destacados / Ofertas -->
+            <!-- Productos Destacados -->
             <section id="productos" class="featured-products">
                 <h2>Productos Destacados</h2>
                 <div class="products-grid">
@@ -108,7 +157,6 @@ foreach ($categorias as $categoria) {
                                     <div class="discount-badge">-<?php echo htmlspecialchars($producto['descuento']); ?>%</div>
                                 <?php endif; ?>
                             </div>
-                            
                             <div class="product-info">
                                 <div class="product-brand"><?php echo htmlspecialchars($producto['marcas']); ?></div>
                                 <h3 class="product-name">
@@ -116,7 +164,6 @@ foreach ($categorias as $categoria) {
                                         <?php echo htmlspecialchars($producto['nombre']); ?>
                                     </a>
                                 </h3>
-                                
                                 <div class="product-price">
                                     <?php if ($producto['descuento'] > 0): ?>
                                         <?php 
@@ -129,7 +176,6 @@ foreach ($categorias as $categoria) {
                                         <span class="price-current">$<?php echo number_format($producto['precio_unitario'], 0, ',', '.'); ?></span>
                                     <?php endif; ?>
                                 </div>
-                                
                                 <div class="product-actions">
                                     <a href="producto.php?id=<?php echo $producto['id']; ?>" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Agregar</a>
                                 </div>
@@ -142,7 +188,7 @@ foreach ($categorias as $categoria) {
                 </div>
             </section>
 
-            <!-- Sección de Servicios (Ejemplo) -->
+            <!-- Servicios -->
             <section id="servicio-tecnico" class="services-section">
                 <h2>Nuestros Servicios</h2>
                 <div class="services-grid">
@@ -164,57 +210,58 @@ foreach ($categorias as $categoria) {
                 </div>
             </section>
 
-            <!-- Productos por Categoría (Ejemplo de cómo se mostrarían) -->
-            <?php foreach ($productos_por_categoria as $cat_nombre => $prods): ?>
-                <?php if (!empty($prods)): ?>
+            <!-- Productos por Categoría -->
+            <?php foreach ($productos_por_categoria as $categoria): ?>
+                <?php if (!empty($categoria['productos'])): ?>
                 <section class="category-products-section">
-                    <h2><?php echo htmlspecialchars($cat_nombre); ?></h2>
+                    <h2><?php echo htmlspecialchars($categoria['nombre']); ?></h2>
                     <div class="products-grid">
-                        <?php foreach ($prods as $producto): ?>
-                            <div class="product-card">
-                                <div class="product-image">
+                        <?php foreach ($categoria['productos'] as $producto): ?>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <a href="producto.php?id=<?php echo $producto['id']; ?>">
+                                    <img src="images/productos/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" onerror="this.src='/placeholder.svg?height=200&width=200'">
+                                </a>
+                                <?php if ($producto['descuento'] > 0): ?>
+                                    <div class="discount-badge">-<?php echo htmlspecialchars($producto['descuento']); ?>%</div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-brand"><?php echo htmlspecialchars($producto['marcas']); ?></div>
+                                <h3 class="product-name">
                                     <a href="producto.php?id=<?php echo $producto['id']; ?>">
-                                        <img src="images/productos/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" onerror="this.src='/placeholder.svg?height=200&width=200'">
+                                        <?php echo htmlspecialchars($producto['nombre']); ?>
                                     </a>
+                                </h3>
+                                <div class="product-price">
                                     <?php if ($producto['descuento'] > 0): ?>
-                                        <div class="discount-badge">-<?php echo htmlspecialchars($producto['descuento']); ?>%</div>
+                                        <?php 
+                                        $precio_original = $producto['precio_unitario'];
+                                        $precio_descuento = $precio_original - ($precio_original * $producto['descuento'] / 100);
+                                        ?>
+                                        <span class="price-original">$<?php echo number_format($precio_original, 0, ',', '.'); ?></span>
+                                        <span class="price-discount">$<?php echo number_format($precio_descuento, 0, ',', '.'); ?></span>
+                                    <?php else: ?>
+                                        <span class="price-current">$<?php echo number_format($producto['precio_unitario'], 0, ',', '.'); ?></span>
                                     <?php endif; ?>
                                 </div>
-                                <div class="product-info">
-                                    <div class="product-brand"><?php echo htmlspecialchars($producto['marcas']); ?></div>
-                                    <h3 class="product-name">
-                                        <a href="producto.php?id=<?php echo $producto['id']; ?>">
-                                            <?php echo htmlspecialchars($producto['nombre']); ?>
-                                        </a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <?php if ($producto['descuento'] > 0): ?>
-                                            <?php 
-                                            $precio_original = $producto['precio_unitario'];
-                                            $precio_descuento = $precio_original - ($precio_original * $producto['descuento'] / 100);
-                                            ?>
-                                            <span class="price-original">$<?php echo number_format($precio_original, 0, ',', '.'); ?></span>
-                                            <span class="price-discount">$<?php echo number_format($precio_descuento, 0, ',', '.'); ?></span>
-                                        <?php else: ?>
-                                            <span class="price-current">$<?php echo number_format($producto['precio_unitario'], 0, ',', '.'); ?></span>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="product-actions">
-                                        <a href="producto.php?id=<?php echo $producto['id']; ?>" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Agregar</a>
-                                        </button>
-                                    </div>
+                                <div class="product-actions">
+                                    <a href="producto.php?id=<?php echo $producto['id']; ?>" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Agregar</a>
                                 </div>
                             </div>
+                        </div>
                         <?php endforeach; ?>
                     </div>
                     <div class="text-center mt-4">
-                        <a href="categoria.php?id=<?php echo $categoria['id']; ?>" class="btn btn-outline">Ver más de <?php echo htmlspecialchars($cat_nombre); ?></a>
+                        <a href="categoria.php?id=<?php echo $categoria['id']; ?>" class="btn btn-outline">
+                            Ver más de <?php echo htmlspecialchars($categoria['nombre']); ?>
+                        </a>
                     </div>
                 </section>
                 <?php endif; ?>
             <?php endforeach; ?>
 
-            <!-- Call to Action / Newsletter -->
+            <!-- Newsletter -->
             <section class="cta-section">
                 <h2>¡No te pierdas nuestras ofertas!</h2>
                 <p>Suscríbete a nuestro boletín y recibe las últimas noticias y promociones.</p>
@@ -252,8 +299,8 @@ foreach ($categorias as $categoria) {
                 </div>
                 <div class="footer-col">
                     <h3>Contacto</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Calle Ficticia 123, Ciudad, País</p>
-                    <p><i class="fas fa-phone"></i> +57 300 123 4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Calle 5 N 3-11 , Teruel- Huila , Colombia</p>
+                    <p><i class="fas fa-phone"></i> +57 313 2157620</p>
                     <p><i class="fas fa-envelope"></i> info@tiendajuanchosofi.com</p>
                 </div>
                 <div class="footer-col">
@@ -274,13 +321,14 @@ foreach ($categorias as $categoria) {
 
     <script src="js/main.js"></script>
     <script>
-        // Función para agregar al carrito (simulada, se conectará con la API)
-        function addToCart(productId) {
-            // Aquí iría la lógica para añadir el producto al carrito
-            // Por ahora, solo una alerta
-            showAlert(`Producto ${productId} agregado al carrito`, 'success');
-            updateCartCounter(); // Actualizar el contador del carrito
+        // Función de búsqueda
+        function buscar() {
+            var buscar = document.getElementById('searchInput').value;
+            if(buscar.trim() !== '') {
+                window.location.href = 'index.php?buscar=' + encodeURIComponent(buscar);
+            }
         }
+        document.getElementById('searchButton').addEventListener('click', buscar);
     </script>
 </body>
 </html>

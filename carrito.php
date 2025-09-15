@@ -14,6 +14,12 @@ $db = $database->getConnection();
 
 // Lógica para obtener productos del carrito (se hará principalmente con JS)
 // Esta parte PHP es más para la estructura inicial o si se necesita persistencia en el servidor
+function agregar_producto_al_carrito($id_producto, $cantidad) {
+  if (!isset($_SESSION['carrito'])) {
+    $_SESSION['carrito'] = array();
+  }
+  $_SESSION['carrito'][$id_producto] = $cantidad;
+}
 ?>
 
 <!DOCTYPE html>
