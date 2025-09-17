@@ -321,7 +321,7 @@ foreach ($categorias as $categoria) {
 
     <script src="js/main.js"></script>
     <script>
-        // Función de búsqueda
+        // Función de búsqueda que si sirve
         function buscar() {
             var buscar = document.getElementById('searchInput').value;
             if(buscar.trim() !== '') {
