@@ -74,7 +74,7 @@ $mensajes_contacto = $stmt_contacto->fetchAll(PDO::FETCH_ASSOC);
                 <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
                 <div class="user-info">
                     <span>Hola, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
-                    <img src="../images/admin-avatar.png" alt="Avatar" class="user-avatar">
+                    <img src="../Logo/user-solid-full.svg" alt="Avatar" class="user-avatar"> 
                 </div>
             </header>
 

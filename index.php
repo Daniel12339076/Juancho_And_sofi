@@ -299,9 +299,15 @@ foreach ($categorias as $categoria) {
                 </div>
                 <div class="footer-col">
                     <h3>Contacto</h3>
+<<<<<<< refs/remotes/origin/daniel
                     <p><i class="fas fa-map-marker-alt"></i> Calle 5 N 3-11 , Teruel- Huila , Colombia</p>
                     <p><i class="fas fa-phone"></i> +57 313 2157620</p>
                     <p><i class="fas fa-envelope"></i> info@tiendajuanchosofi.com</p>
+=======
+                    <p><i class="fas fa-map-marker-alt"></i>Crr 4 NO. 6-02  Teruel- Huila</p>
+                    <p><i class="fas fa-phone"></i> +57 3127197565</p>
+                    <p><i class="fas fa-envelope"></i> juanpema29@.com</p>
+>>>>>>> local
                 </div>
                 <div class="footer-col">
                     <h3>Métodos de Pago</h3>
